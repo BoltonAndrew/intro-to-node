@@ -1,42 +1,70 @@
-// let num1 = 12;
-// console.log(num1);
-// Node Runtime Environment allows for server side JS
-// Chromium V8 Engine + Node API === Node Runtime Env
-// Whereas in browser:
-// Chromium V8 Engine + Browser + WEB API + HTML file
+// Express is a node library, so it must be installed using a package handler
+// We're going to use NPM - Node Package Manager
+const express = require("express");
+const server = express();
+server.use(express.json()); // This API only deals in JSON data - in and out
 
-const http = require("http");
-const url = require("url");
-const { readFile } = require("fs/promises");
-const path = require("path");
-
-http
-  .createServer(async function (req, res) {
-    res.writeHead(416, { "Content-Type": "text/html" });
-    const html = await readFile(path.join(__dirname, "./index.html"));
-    res.write(html);
-    // let urlString = url.parse(req.url, true);
-    // let stringyUrl = JSON.stringify(urlString);
-    // console.log(stringyUrl);
-    // if (req.url === "/summer") {
-    //   console.log(req.url);
-    //   res.write("<h1>It's warm!</h1>");
-    // } else if (req.url === "/winter") {
-    //   console.log(req.url);
-    //   res.write("<h1>It's cold!</h1>");
-    // } else {
-    //   console.log(req.url);
-    //   res.write("<h1>It's mild</h1>");
-    // }
-    res.end();
-  })
-  .listen(5001);
-
-//   Type into the browser bar
-/* fetch("http://localhost:5001", {
-    method: "GET"
-})
-
-
-<input type="search" onSubmit=fetch />
+/* 
+HTTP Verbs
+GET: Reading data - Should only really send back data without manipulation - GET does not accept body
+POST: Creating or sending new data - Should create db entries or manipulate requests
+PUT: Updating data in a replacement style - Should replace a db entry with new~ data
+PATCH: Update data that currently exists - Should update part of a db entry
+DELETE: Deleting data - DELETE does not accept body
 */
+
+const db = [];
+
+server.get("/", function (req, res) {
+  res.send(db);
+});
+
+server.post("/", function (req, res) {
+  // insert new info into the db
+  console.log(req.body);
+  db.push(req.body);
+  res.sendStatus(201);
+});
+
+server.put("/", function (req, res) {
+  let msg = "Not updated";
+  for (let i = 0; i < db.length; i++) {
+    if (db[i].username === req.body.username) {
+      db[i].pass = req.body.pass;
+      msg = "Updated";
+    }
+  }
+  res.status(202).send(msg);
+});
+
+server.delete("/:index", function (req, res) {
+  // With Delete we have to send data by param or query
+  // console.log(req.params.index);
+  // console.log(req.query.age);
+  db.splice(req.params.index, 1);
+  res.sendStatus(200);
+});
+
+/* 
+psuedo server example
+const server = {
+  "/": {
+    get: function,
+    post: function,
+    put: function,
+    patch: function,
+    delete: function
+  },
+  "/get-request": {
+    get: function,
+    post: function,
+    put: function,
+    patch: function,
+    delete: function
+  }
+}
+*/
+
+server.listen(5001, function () {
+  console.log("Server is running");
+});
