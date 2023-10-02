@@ -4,7 +4,6 @@ const capitalize = (req, res, next) => {
     splitStr[0] = splitStr[0].toUpperCase();
     req.body.name = splitStr.join("");
   }
-  console.log("SteveGary");
   next();
 };
 
