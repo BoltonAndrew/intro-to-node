@@ -4,7 +4,7 @@ const path = require("path");
 // Create the DB config
 const sequelize = new Sequelize({
   dialect: "sqlite",
-  storage: path.join(__dirname, "fruit.sqlite"),
+  storage: path.join(__dirname, "shop.sqlite"),
 });
 
 async function testConnection() {
