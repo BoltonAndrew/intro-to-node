@@ -5,6 +5,8 @@ const {
   readItems,
   updateItem,
   deleteItem,
+  setCategory,
+  getItemWithCategory,
 } = require("../controllers/item.js");
 
 const router = Router();
@@ -14,5 +16,7 @@ router.get("/", readItem);
 router.get("/multiple", readItems);
 router.patch("/:id", updateItem);
 router.delete("/:id", deleteItem);
+router.post("/setCategory/:id", setCategory);
+router.get("/:id", getItemWithCategory);
 
 module.exports = router;

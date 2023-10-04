@@ -1,4 +1,4 @@
-const Item = require("../models/Item.js");
+const { Item, Category } = require("../models");
 
 async function createItem(req, res, next) {
   try {
@@ -67,10 +67,32 @@ async function deleteItem(req, res, next) {
   }
 }
 
+async function setCategory(req, res, next) {
+  try {
+    const item = await Item.findByPk(req.params.id);
+    const category = await Category.findOne({ where: req.body });
+    item.addCategory(category);
+    res.sendStatus(201);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function getItemWithCategory(req, res, next) {
+  try {
+    const item = await Item.findByPk(req.params.id, { include: Category });
+    res.status(200).send(item);
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   createItem,
   readItem,
   readItems,
   updateItem,
   deleteItem,
+  setCategory,
+  getItemWithCategory,
 };
