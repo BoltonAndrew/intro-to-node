@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { Sequelize } = require("sequelize"); // Import Create Connection Class called Sequelize
 const path = require("path");
 
