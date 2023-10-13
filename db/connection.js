@@ -3,9 +3,10 @@ const { Sequelize } = require("sequelize"); // Import Create Connection Class ca
 const path = require("path");
 
 // Create the DB config
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: path.join(__dirname, "shop.sqlite"),
+const sequelize = new Sequelize(process.env.DB_URI, {
+  dialectOptions: {
+    ssl: true,
+  },
 });
 
 async function testConnection() {
